@@ -18,7 +18,9 @@
 #include <voice_control_setting.h>
 
 #include "voice_control_panel_main.h"
+#if 0
 #include "voice_control_panel_view.h"
+#endif
 #include "voice_control_panel_vc.h"
 
 static void __vc_enabled_changed_cb(bool enabled, void* user_data)
@@ -76,11 +78,13 @@ static bool app_create(void *data)
 	    lang = NULL;
 	}
 
+#if 0
 	/* Create View */
 	if (0 != vc_panel_view_create(ad)) {
 		LOGE("[ERROR] Fail to create view");
 		return -1;
 	}
+#endif
 
 	/* Initialize Voice Control */
 	if (0 != vc_panel_vc_init(ad)) {
@@ -142,7 +146,9 @@ static void app_terminate(void *data)
 
 	vc_panel_vc_cancel(ad);
 
+#if 0
 	vc_panel_view_destroy(ad);
+#endif
 
 	vc_setting_deinitialize();
 
@@ -156,6 +162,7 @@ static void ui_app_lang_changed(app_event_info_h event_info, void *user_data)
 	LOGD("");
 }
 
+#if 0
 static void ui_app_orient_changed(app_event_info_h event_info, void *user_data)
 {
 	LOGD("");
@@ -170,6 +177,7 @@ static void ui_app_low_battery(app_event_info_h event_info, void *user_data)
 {
 	LOGD("");
 }
+#endif
 
 static void ui_app_low_memory(app_event_info_h event_info, void *user_data)
 {
@@ -190,11 +198,21 @@ int main(int argc, char *argv[])
 	event_callback.resume = app_resume;
 	event_callback.app_control = app_control;
 
+#if 0
 	ui_app_add_event_handler(&handlers[APP_EVENT_LOW_BATTERY], APP_EVENT_LOW_BATTERY, ui_app_low_battery, &ad);
+#endif
+
 	ui_app_add_event_handler(&handlers[APP_EVENT_LOW_MEMORY], APP_EVENT_LOW_MEMORY, ui_app_low_memory, &ad);
+
+#if 0
 	ui_app_add_event_handler(&handlers[APP_EVENT_DEVICE_ORIENTATION_CHANGED], APP_EVENT_DEVICE_ORIENTATION_CHANGED, ui_app_orient_changed, &ad);
+#endif
+
 	ui_app_add_event_handler(&handlers[APP_EVENT_LANGUAGE_CHANGED], APP_EVENT_LANGUAGE_CHANGED, ui_app_lang_changed, &ad);
+
+#if 0
 	ui_app_add_event_handler(&handlers[APP_EVENT_REGION_FORMAT_CHANGED], APP_EVENT_REGION_FORMAT_CHANGED, ui_app_region_changed, &ad);
+#endif
 
 	ret = ui_app_main(argc, argv, &event_callback, &ad);
 	if (ret != APP_ERROR_NONE) {

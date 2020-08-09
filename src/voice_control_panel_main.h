@@ -38,11 +38,15 @@ enum {
 };
 
 typedef struct _appdata {
+#if 0
 	/* GUI */
 	float scale_w;
 	float scale_h;
+#endif
 
 	Evas_Object *win;
+
+#if 0
 	Evas_Object *layout_main;
 	Evas_Object *image_mic;
 	Evas_Object *image_arrow;
@@ -55,16 +59,20 @@ typedef struct _appdata {
 	Evas_Object *help_layout;
 
 	Elm_Theme *theme;
+#endif
 
 	int app_state;
 
 	int act_state;
 
 	int current_depth;
+
+#if 0
 	int current_path[2];
 
 	efl_util_inputgen_h touch;
 	efl_util_inputgen_h back_key;
+#endif
 
 	GList *cmd_list;
 } appdata;
