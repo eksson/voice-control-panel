@@ -5,7 +5,16 @@
         <description>Voice control panel Application</description>
         <ui-application appid="org.tizen.voice-control-panel" exec="voice-control-panel" nodisplay="true" multiple="false" type="capp" taskmanage="false">
             <label>Voice control panel</label>
-       </ui-application>
+            <metadata key="http://tizen.org/metadata/multi-assistant/name" value="Sample Assistant"/>
+            <metadata key="http://tizen.org/metadata/multi-assistant/language" value="ko_KR"/>
+            <metadata key="http://tizen.org/metadata/multi-assistant/wakeup_word" value="하이코지"/>
+            <metadata key="http://tizen.org/metadata/multi-assistant/wakeup_word" value="하이코지마"/>
+            <metadata key="http://tizen.org/metadata/multi-assistant/wakeup_word" value="안녕코지"/>
+            <metadata key="http://tizen.org/metadata/multi-assistant/wakeup_word" value="안녕코지마"/>
+            <metadata key="http://tizen.org/metadata/multi-assistant/wakeup_engine_appid" value="wakeup-engine-default"/>
+            <metadata key="http://tizen.org/metadata/multi-assistant/custom_ui" value="true"/>
+            <background-category value="assistant"/>
+        </ui-application>
         <privileges>
             <privilege>http://tizen.org/privilege/recorder</privilege>
             <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
