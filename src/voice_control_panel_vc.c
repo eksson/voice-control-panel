@@ -18,7 +18,10 @@
 #include <dlog.h>
 #include <Elementary.h>
 
+#if 0
 #include <tts.h>
+#endif
+
 #include <glib.h>
 #include <json-glib/json-glib.h>
 #include <efl_util.h>
@@ -27,29 +30,51 @@
 #include <voice_control_common.h>
 #include <voice_control_manager.h>
 
+#if 0
 #include "voice_control_panel_action.h"
+#endif
+
 #include "voice_control_panel_command.h"
 #include "voice_control_panel_main.h"
 #include "voice_control_panel_vc.h"
+
+#if 0
 #include "voice_control_panel_view.h"
 #include "voice_control_panel_touchevent.h"
+#endif
 
 static vc_cmd_list_h g_cmd_list_1st;
+
+#if 0
 static vc_cmd_list_h g_cmd_list_2nd[NUM_COMMAND_1ST];
+#endif
+
 static Ecore_Timer *g_deactive_timer = NULL;
 
+#if 0
 static tts_h g_tts;
 static char *g_tts_lang = NULL;
 static bool g_dialog_continuous = false;
 static bool g_dialog_process = false;
+
 static int g_num_candidate = 0;
+#endif
 
 static vc_cmd_list_h g_candidate_cmd_list;
 
+#if 0
 static JsonParser *g_json_parser;
+#endif
 
+int vc_count = 0;
+#define MAX_VOICE_COMMAND_REPEAT	5
+#define VOICE_WAITING_TIME			10	//seconds
+
+#if 0
 static bool __current_command_cb(vc_cmd_h vc_command, void* user_data)
 {
+	LOGD("==== Current commands cb ====");
+
 	int type;
 	if (0 != vc_cmd_get_type(vc_command, &type)) {
 		LOGE("[ERROR] Fail to get type");
@@ -58,12 +83,16 @@ static bool __current_command_cb(vc_cmd_h vc_command, void* user_data)
 
 	return true;
 }
+#endif
 
 static int __vc_panel_vc_get_current_commands(void *data)
 {
-	appdata *ad = (appdata *)data;
-
 	LOGD("==== Get current commands ====");
+
+	return 0;
+
+#if 0
+	appdata *ad = (appdata *)data;
 	if (0 < g_list_length(ad->cmd_list)) {
 		GList *iter = NULL;
 		iter = g_list_first(ad->cmd_list);
@@ -104,6 +133,7 @@ static int __vc_panel_vc_get_current_commands(void *data)
 	}
 
 	return 0;
+#endif
 }
 
 static void __vc_panel_vc_destroy_command_list()
@@ -114,12 +144,14 @@ static void __vc_panel_vc_destroy_command_list()
 		LOGE("[WARNING] Fail to destroy list");
 	}
 
+#if 0
 	int i;
 	for (i = 0; i < NUM_COMMAND_1ST; i++) {
 		if (0 != vc_cmd_list_destroy(g_cmd_list_2nd[i], true)) {
 			LOGE("[WARNING] Fail to destroy list");
 		}
 	}
+#endif
 
 	LOGD("====");
 	LOGD(" ");
@@ -164,6 +196,7 @@ static int __vc_panel_vc_create_command_list()
 		}
 	}
 
+#if 0
 	/* 2nd depth */
 	for (i = 0; i < NUM_COMMAND_1ST; i++) {
 		if (0 != vc_cmd_list_create(&g_cmd_list_2nd[i])) {
@@ -201,10 +234,12 @@ static int __vc_panel_vc_create_command_list()
 			}
 		}
 	}
+#endif
 
 	return 0;
 }
 
+#if 0
 static int __vc_panel_find_dispText(const gchar *json, char **displayText)
 {
 	LOGD("==== Find the display text(%s)", json);
@@ -283,6 +318,7 @@ static int __vc_panel_find_dispText(const gchar *json, char **displayText)
 
 	return 0;
 }
+#endif
 
 static Eina_Bool __start_cb(void *data)
 {
@@ -296,7 +332,9 @@ static Eina_Bool __start_cb(void *data)
 	}
 
 	if (VC_SERVICE_STATE_READY != state) {
+#if 0
 		LOGD("[WARNING] Wait for service state ready");
+#endif
 		return EINA_TRUE;
 	}
 
@@ -319,7 +357,8 @@ static Eina_Bool __start_cb(void *data)
 	return EINA_FALSE;
 }
 
-static void __vc_panel_vc_state_changed_cb(vc_state_e previous, vc_state_e current, void *user_data)
+static void __vc_panel_vc_state_changed_cb(vc_state_e previous, vc_state_e current,
+	void *user_data)
 {
 	LOGD("==== State is changed ====");
 	LOGD("Previous(%d) -> Current(%d)", previous, current);
@@ -339,14 +378,19 @@ static void __vc_panel_vc_error_cb(vc_error_e reason, void *user_data)
 
 	if (0 != vc_mgr_get_error_message(&err_msg)) {
 		LOGE("[ERROR] Fail to get error message");
+//		Show the error message at Cozyma app -> 
+//
+#if 0
 		vc_panel_view_show_result(user_data, "Unknow error is occurred!!");
-
+#endif
 		return;
 	}
 
 	if (NULL != err_msg) {
 		snprintf(disp_text, 256, "Error is occurred!! (%s)", err_msg);
+#if 0
 		vc_panel_view_show_result(user_data, disp_text);
+#endif
 		free(err_msg);
 		err_msg = NULL;
 	}
@@ -355,6 +399,7 @@ static void __vc_panel_vc_error_cb(vc_error_e reason, void *user_data)
 	LOGD(" ");
 }
 
+#if 0
 static void __vc_panel_vc_reset(void *data)
 {
 	appdata *ad = (appdata *)data;
@@ -367,6 +412,7 @@ static void __vc_panel_vc_reset(void *data)
 		LOGE("[ERROR] Fail to set command list");
 	}
 }
+#endif
 
 static Eina_Bool __vc_panel_vc_finalize(void *data)
 {
@@ -376,6 +422,7 @@ static Eina_Bool __vc_panel_vc_finalize(void *data)
 	return EINA_FALSE;
 }
 
+#if 0
 static Eina_Bool __vc_panel_vc_deactivate(void *data)
 {
 	LOGD("=== Deactivate ===");
@@ -392,11 +439,11 @@ static Eina_Bool __vc_panel_vc_deactivate(void *data)
 		LOGE("[ERROR] Fail to deactivate");
 		return EINA_FALSE;
 	}
-
 	vc_panel_view_show_result(data, _("IDS_RESTART"));
 
 	return EINA_FALSE;
 }
+#endif
 
 static Eina_Bool __vc_panel_vc_restart(void *data)
 {
@@ -421,13 +468,17 @@ static Eina_Bool __vc_panel_vc_restart(void *data)
 		if (0 != vc_mgr_set_command_list(g_cmd_list_1st)) {
 			LOGE("[ERROR] Fail to set command list");
 		}
+#if 0
 	} else if (2 == ad->current_depth) {
 		if (0 != vc_mgr_set_command_list(g_cmd_list_2nd[ad->current_path[0]])) {
 			LOGE("[ERROR] Fail to set command list");
 		}
+#endif
 	}
 
+#if 0
 	vc_panel_view_show(ad);
+#endif
 
 	if (0 != __vc_panel_vc_get_current_commands(ad)) {
 		LOGE("[ERROR] Fail to get current commands");
@@ -435,6 +486,11 @@ static Eina_Bool __vc_panel_vc_restart(void *data)
 
 	if (0 != vc_mgr_start(false)) {
 		LOGE("[ERROR] Fail to start");
+		if (NULL != g_deactive_timer) {
+			ecore_timer_del(g_deactive_timer);
+			g_deactive_timer = NULL;
+		}
+		ui_app_exit();
 	}
 
 	LOGD("====");
@@ -443,7 +499,8 @@ static Eina_Bool __vc_panel_vc_restart(void *data)
 	return EINA_FALSE;
 }
 
-static void __vc_panel_vc_service_state_changed_cb(vc_service_state_e previous, vc_service_state_e current, void *user_data)
+static void __vc_panel_vc_service_state_changed_cb(vc_service_state_e previous,
+	vc_service_state_e current, void *user_data)
 {
 	LOGD("==== Service state is changed ====");
 	LOGD("Previous(%d) -> Current(%d)", previous, current);
@@ -452,21 +509,35 @@ static void __vc_panel_vc_service_state_changed_cb(vc_service_state_e previous, 
 
 	if (VC_SERVICE_STATE_READY == previous && VC_SERVICE_STATE_RECORDING == current) {
 		LOGD("==== Show by recording ====");
+//		Show the message "recording" at Cozyma app
+#if 0
 		vc_panel_view_show(ad);
+#endif
+	} else if ((VC_SERVICE_STATE_RECORDING == previous || VC_SERVICE_STATE_PROCESSING == previous)
+				 && VC_SERVICE_STATE_READY == current) {
+		LOGD("==== Process finish ====");
 
-	} else if ((VC_SERVICE_STATE_RECORDING == previous || VC_SERVICE_STATE_PROCESSING == previous) && VC_SERVICE_STATE_READY == current) {
 		if (PANEL_STATE_SERVICE == ad->app_state) {
 			LOGD("==== Process finish ====");
 		} else {
+			LOGD("==== Restart recoding (times %d / %d) ====", vc_count, MAX_VOICE_COMMAND_REPEAT);
+			vc_panel_vc_activate(ad);
+#if 0
 			LOGD("==== Hide ====");
 			__vc_panel_vc_reset(ad);
+#endif
 		}
 	} else if (VC_SERVICE_STATE_RECORDING == previous && VC_SERVICE_STATE_PROCESSING == current) {
 		LOGD("==== Processing ====");
+//		Show the message "recording" at Cozyma app
+#if 0
 		vc_panel_view_show_result(ad, _("IDS_PROCESSING"));
+#endif
 	}
+
 }
 
+#if 0
 static bool __vc_panel_search_cmd_cb(vc_cmd_h vc_command, void* user_data)
 {
 	LOGD("==== Search the selected command cb ====");
@@ -521,6 +592,7 @@ static void __vc_panel_item_selected_cb(void *data, Evas_Object *obj, void *even
 	LOGD("==== Command list item selected cb ====");
 
 	appdata *ad = (appdata*)data;
+
 	Elm_Object_Item *it = (Elm_Object_Item*)event_info;
 	intptr_t pid = (intptr_t)elm_object_item_data_get(it);
 
@@ -671,9 +743,117 @@ static bool __vc_panel_vc_app_chooser_cb(vc_cmd_h vc_command, void* user_data)
 
 	return true;
 }
+#endif
 
-static bool __vc_panel_vc_all_result_cb(vc_result_event_e event, vc_cmd_list_h vc_cmd_list, const char* result, const char* msg, void *user_data)
+static bool __vc_panel_vc_all_result_cb(vc_result_event_e event, vc_cmd_list_h vc_cmd_list,
+	const char* result, const char* msg, void *user_data)
 {
+	LOGD("==== All result cb ====");
+	LOGD("Result Text - %s", result);
+
+	if (NULL != g_deactive_timer) {
+		ecore_timer_del(g_deactive_timer);
+		g_deactive_timer = NULL;
+	}
+
+	g_deactive_timer = ecore_timer_add(VOICE_WAITING_TIME, (void *)ui_app_exit, user_data);
+	if (!g_deactive_timer) {
+		LOGE("Failed to add getter timer");
+	}
+
+	char result_str[MAX_VOICE_LENGTH + 1] = {0, };
+	int str_len = 0;
+	int quick_command_len = 0;
+
+	for (int i = 0; result[i] != 0; i++) {
+		if (result[i] != ' ') {
+			result_str[str_len] = result[i];
+			if (str_len >= MAX_VOICE_LENGTH) {
+				break;
+			}
+			str_len++;
+		}
+	}
+	result_str[str_len] = 0;
+	LOGD("Result Text : %s -> %s, %d", result, result_str, str_len);
+
+#if 0
+	// Need to save the origianl TEXT of recognition "result" to the file!!!! 
+#endif
+
+	vc_count++;
+	int voice_command = -1;
+	voice_command_h *vc_list;
+
+	if ('A' <= result_str[0] && result_str[0] <= 'z') {
+		vc_list = voice_command_list_en;
+		quick_command_len = 6;
+	} else {
+		vc_list = voice_command_list_kr;
+		quick_command_len = 9;
+	}
+
+	//Search for Quick commnad
+	int pos = -1;
+	if (str_len <= quick_command_len) {
+		for (int i = 0; i <= 20; i++) {
+			pos = strstr(result_str, vc_list[i].voice) - result_str;
+			if (0 <= pos && pos <= 3) {
+				voice_command = vc_list[i].command_id;
+				break;
+			}
+		}
+	}
+
+	//Search for General commnad
+	if (voice_command == -1) {
+		for (int i = 21; vc_list[i].command_id != CMD_LIST_END; i++) {
+			pos = strstr(result_str, vc_list[i].voice) - result_str;
+			if (0 <= pos && pos <= 3) {
+				voice_command = vc_list[i].command_id;
+				break;
+			}
+		}
+	}
+
+	if (voice_command != -1) {
+		LOGD("=== SUCCESS === vc pos : %d, command : %d", pos, voice_command);
+//		Add the solution when voice command is successed
+//
+//
+//
+//
+//
+		if (NULL != g_deactive_timer) {
+			ecore_timer_del(g_deactive_timer);
+			g_deactive_timer = NULL;
+		}
+		ui_app_exit();
+	} else {
+		LOGD("=== Cannot to find the command in voice_command_list ===");
+		if (NULL != g_deactive_timer) {
+			ecore_timer_del(g_deactive_timer);
+			g_deactive_timer = NULL;
+		}
+//		Add the solution when voice command is failed
+//		
+//
+//
+//
+//
+		if (vc_count >= MAX_VOICE_COMMAND_REPEAT) {
+//		Add the solution when timeout for recoding time
+//
+			ui_app_exit();
+		}
+	}
+
+	LOGD("====");
+	LOGD(" ");
+
+	return true;
+
+#if 0
 	appdata *ad = (appdata*)user_data;
 	LOGD("==== All result cb ====");
 
@@ -723,17 +903,23 @@ static bool __vc_panel_vc_all_result_cb(vc_result_event_e event, vc_cmd_list_h v
 	LOGD(" ");
 
 	return true;
+#endif
 }
 
-static void __vc_panel_vc_pre_result_cb(vc_pre_result_event_e event, const char* pre_result, void *user_data)
+static void __vc_panel_vc_pre_result_cb(vc_pre_result_event_e event, const char* pre_result,
+	void *user_data)
 {
 	LOGD("==== Pre result cb ====");
 	LOGD("Result Text - %s", pre_result);
 }
 
-static void __vc_panel_vc_result_cb(vc_result_event_e event, vc_cmd_list_h vc_cmd_list, const char* result, void *user_data)
+static void __vc_panel_vc_result_cb(vc_result_event_e event, vc_cmd_list_h vc_cmd_list,
+	const char* result, void *user_data)
 {
 	LOGD("==== Result cb ====");
+	LOGD("Result Text - %s", result);
+
+#if 0
 	appdata* ad = user_data;
 
 	if (NULL != result) {
@@ -765,20 +951,28 @@ static void __vc_panel_vc_result_cb(vc_result_event_e event, vc_cmd_list_h vc_cm
 			bool ret;
 			ret = vc_panel_action(result, user_data);
 			ad->act_state = 1;
-
 			if (true != ret) {
 				vc_panel_vc_finalize(user_data);
 			}
 		}
 	}
+#endif
 }
 
 static void __vc_panel_vc_speech_detected_cb(void *user_data)
 {
+#if 0
 	LOGD("==== Speech detected ====");
+#endif
+
+	if (NULL != g_deactive_timer) {
+		ecore_timer_del(g_deactive_timer);
+		g_deactive_timer = NULL;
+	}
 }
 
-static void __vc_panel_vc_language_changed_cb(const char* previous, const char* current, void* user_data)
+static void __vc_panel_vc_language_changed_cb(const char* previous, const char* current,
+	void* user_data)
 {
 	LOGD("Language is changed (%s) to (%s)", previous, current);
 
@@ -792,14 +986,18 @@ static void __vc_panel_vc_language_changed_cb(const char* previous, const char* 
 		LOGE("[ERROR] Fail to create command list");
 	}
 
+#if 0
 	if (NULL != g_tts_lang) {
 		free(g_tts_lang);
 	}
 
 	g_tts_lang = strdup(current);
+#endif
 }
 
-static void __vc_panel_vc_mgr_dialog_request_cb(int pid, const char *disp_text, const char *utt_text, bool continuous, void *user_data)
+#if 0
+static void __vc_panel_vc_mgr_dialog_request_cb(int pid, const char *disp_text,
+	const char *utt_text, bool continuous, void *user_data)
 {
 	int utt_id;
 
@@ -815,12 +1013,12 @@ static void __vc_panel_vc_mgr_dialog_request_cb(int pid, const char *disp_text, 
 	} else {
 		//display the text
 		vc_panel_view_show_result(user_data, disp_text);
-
 		g_dialog_continuous = continuous;
 		g_dialog_process = true;
 
 		//play tts
-		if (0 != tts_add_text(g_tts, utt_text, g_tts_lang, TTS_VOICE_TYPE_AUTO, TTS_SPEED_AUTO, &utt_id)) {
+		if (0 != tts_add_text(g_tts, utt_text, g_tts_lang, TTS_VOICE_TYPE_AUTO,
+				TTS_SPEED_AUTO, &utt_id)) {
 			LOGE("[WARNING] Text adding is failed");
 		}
 
@@ -829,7 +1027,9 @@ static void __vc_panel_vc_mgr_dialog_request_cb(int pid, const char *disp_text, 
 		}
 	}
 }
+#endif
 
+#if 0
 static void __vc_panel_tts_utterance_completed_cb(tts_h tts, int utt_id, void* user_data)
 {
 	LOGD("==== Utterance (%d) is completed ====", utt_id);
@@ -846,6 +1046,7 @@ static void __vc_panel_tts_utterance_completed_cb(tts_h tts, int utt_id, void* u
 
 	g_dialog_process = false;
 }
+#endif
 
 int vc_panel_vc_start(void *data)
 {
@@ -870,7 +1071,8 @@ int vc_panel_vc_cancel(void *data)
 		return -1;
 	}
 
-	if ((VC_SERVICE_STATE_RECORDING == service_state) || (VC_SERVICE_STATE_PROCESSING == service_state)) {
+	if ((VC_SERVICE_STATE_RECORDING == service_state) ||
+		(VC_SERVICE_STATE_PROCESSING == service_state)) {
 		LOGD("==== service state (%d)", service_state);
 
 		if (0 != vc_mgr_cancel()) {
@@ -885,7 +1087,9 @@ int vc_panel_vc_cancel(void *data)
 int vc_panel_vc_init(void *data)
 {
 	LOGD("==== Initialze Voice control ====");
+#if 0
 	appdata *ad = (appdata *)data;
+#endif
 
 	if (0 != vc_mgr_initialize()) {
 		LOGE("[ERROR] Fail to initialize");
@@ -897,7 +1101,8 @@ int vc_panel_vc_init(void *data)
 		return -1;
 	}
 
-	if (0 != vc_mgr_set_service_state_changed_cb(__vc_panel_vc_service_state_changed_cb, data)) {
+	if (0 != vc_mgr_set_service_state_changed_cb(__vc_panel_vc_service_state_changed_cb,
+			data)) {
 		LOGE("[ERROR] Fail to set service state changed cb");
 		return -1;
 	}
@@ -922,15 +1127,18 @@ int vc_panel_vc_init(void *data)
 		return -1;
 	}
 
-	if (0 != vc_mgr_set_current_language_changed_cb(__vc_panel_vc_language_changed_cb, data)) {
+	if (0 != vc_mgr_set_current_language_changed_cb(__vc_panel_vc_language_changed_cb,
+			data)) {
 		LOGE("[ERROR] Fail to set language changed cb");
 		return -1;
 	}
 
+#if 0
 	if (0 != vc_mgr_set_dialog_request_cb(__vc_panel_vc_mgr_dialog_request_cb, data)) {
 		LOGE("[ERROR] Fail to set dialog request cb");
 		return -1;
 	}
+#endif
 
 	if (0 != vc_mgr_set_error_cb(__vc_panel_vc_error_cb, data)) {
 		LOGE("[ERROR] Fail to set error cb");
@@ -953,7 +1161,19 @@ int vc_panel_vc_init(void *data)
 		return -1;
 	}
 
-	evas_object_smart_callback_add(ad->help_genlist, "selected", __vc_panel_item_selected_cb, ad);
+	if (NULL != g_deactive_timer) {
+		ecore_timer_del(g_deactive_timer);
+		g_deactive_timer = NULL;
+	}
+
+	g_deactive_timer = ecore_timer_add(VOICE_WAITING_TIME, (void *)ui_app_exit, data);
+	if (!g_deactive_timer) {
+		LOGE("Failed to add getter timer");
+	}
+
+#if 0
+	evas_object_smart_callback_add(ad->help_genlist, "selected",
+		__vc_panel_item_selected_cb, ad);
 
 	//tts handle create & set
 	if (0 != tts_create(&g_tts)) {
@@ -961,7 +1181,8 @@ int vc_panel_vc_init(void *data)
 		return -1;
 	}
 
-	if (0 != tts_set_utterance_completed_cb(g_tts, __vc_panel_tts_utterance_completed_cb, data)) {
+	if (0 != tts_set_utterance_completed_cb(g_tts, __vc_panel_tts_utterance_completed_cb,
+		data)) {
 		LOGE("[ERROR] Fail to set utt completed cb");
 		tts_destroy(g_tts);
 
@@ -1029,6 +1250,7 @@ int vc_panel_vc_init(void *data)
 	}
 
 	vc_panel_touch_set_speed(800);
+#endif
 
 	LOGD("====");
 	LOGD(" ");
@@ -1065,6 +1287,7 @@ int vc_panel_vc_deinit(void *data)
 		return -1;
 	}
 
+#if 0
 	if (NULL != g_tts_lang) {
 		free(g_tts_lang);
 		g_tts_lang = NULL;
@@ -1074,12 +1297,14 @@ int vc_panel_vc_deinit(void *data)
 		LOGE("[ERROR] Fail to tts destroy");
 		return -1;
 	}
+#endif
 
 	if (0 != vc_cmd_list_destroy(g_candidate_cmd_list, true)) {
 		LOGE("[ERROR] Fail to command list destroy");
 		return -1;
 	}
 
+#if 0
 	g_object_unref(g_json_parser);
 
 	if (0 != efl_util_input_deinitialize_generator(ad->touch)) {
@@ -1090,6 +1315,7 @@ int vc_panel_vc_deinit(void *data)
 		LOGE("[ERROR] Fail to deinitialize");
 		return -1;
 	}
+#endif
 
 	LOGD("====");
 	LOGD(" ");
@@ -1099,6 +1325,8 @@ int vc_panel_vc_deinit(void *data)
 
 int vc_panel_vc_activate(void *data)
 {
+	LOGD("=== Activate Voice control ===");
+
 	if (NULL != g_deactive_timer) {
 		ecore_timer_del(g_deactive_timer);
 		g_deactive_timer = NULL;
@@ -1111,12 +1339,15 @@ int vc_panel_vc_activate(void *data)
 
 int vc_panel_vc_deactivate(void *data, double delay)
 {
+	LOGD("=== Deactivate Voice control ===");
+
 	if (NULL != g_deactive_timer) {
 		ecore_timer_del(g_deactive_timer);
 		g_deactive_timer = NULL;
 	}
-
+#if 0
 	g_deactive_timer = ecore_timer_add(delay, __vc_panel_vc_deactivate, data);
+#endif
 
 	return 0;
 }
