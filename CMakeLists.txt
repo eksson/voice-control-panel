@@ -16,12 +16,9 @@ SET(LOCALEDIR "${RESDIR}/locale")
 SET(IMAGEDIR "${RESDIR}/images")
 
 SET(SRCS
-    src/voice_control_panel_action.c
     src/voice_control_panel_command.c
     src/voice_control_panel_main.c
-    src/voice_control_panel_view.c
     src/voice_control_panel_vc.c
-    src/voice_control_panel_touchevent.c
 )
 
 IF("${CMAKE_BUILD_TYPE}" STREQUAL "")
