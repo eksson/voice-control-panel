@@ -20,11 +20,11 @@
 
 #if 0
 #include <tts.h>
-#endif
 
 #include <glib.h>
 #include <json-glib/json-glib.h>
 #include <efl_util.h>
+#endif
 
 #include <voice_control_command_expand.h>
 #include <voice_control_common.h>
